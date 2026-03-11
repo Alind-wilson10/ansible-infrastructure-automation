@@ -1,0 +1,30 @@
+---
+# tasks file for backup
+- name: Install mariadb client tools
+  dnf:
+   name: mariadb
+   state: present
+
+- name: Create backup directory
+  file: 
+   path: /backup
+   state: directory
+   owner: root
+   group: root
+   mode: '0755'
+
+- name: Create database backup script
+  copy:
+   dest: /usr/local/bin/db_backup.sh
+   mode: '0755'
+   content: |
+     #!/bin/bash
+     DATE=$(date +%F)
+     mysqldump --all-databases > /backup/db_backup_$DATE.sql
+
+- name: Schedule daily database backup
+  cron: 
+   name: "Database Backup"
+   minute: "0"
+   hour: "2"
+   job: "usr/local/bin/db_backup.sh" 

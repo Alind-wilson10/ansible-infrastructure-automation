@@ -1,0 +1,5 @@
+---
+# vars file for lvm
+disk: /dev/sdb
+lv_size: 2G
+filesystem: xfs

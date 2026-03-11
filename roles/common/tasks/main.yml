@@ -1,0 +1,36 @@
+---
+# tasks file for common
+- name: Install common utilities
+  dnf: 
+   name: 
+    - vim
+    - curl
+    - wget
+    - git
+    - bash-completion
+    - rsync
+    - tar
+    - zip
+    - unzip
+    - chrony
+    - firewalld
+   state: present
+
+- name: Enable and start chronyd service
+  service:
+   name: chronyd
+   state: started
+   enabled: yes
+
+- name: Enable and start firewalld service
+  service:
+   name: firewalld
+   state: started
+   enabled: yes
+
+- name: Configure MOTD message 
+  copy:
+   content: 
+    Enterprise Automation Lab
+    Managed by Ansible 
+   dest: /etc/motd  

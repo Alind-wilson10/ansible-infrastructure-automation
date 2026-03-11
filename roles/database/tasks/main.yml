@@ -1,0 +1,23 @@
+---
+# tasks file for database
+- name: Install MariaDB server
+  dnf: 
+   name: mariadb-server
+   state: present
+
+- name: Start Mariadb
+  service:
+   name: mariadb
+   state: started
+
+- name: Enable MariaDB service
+  service:
+   name: mariadb
+   enabled: yes
+
+- name: Allow MYSQL service in firewall
+  firewalld:
+   service: mysql
+   permanent: yes
+   state: enabled
+   immediate: yes 

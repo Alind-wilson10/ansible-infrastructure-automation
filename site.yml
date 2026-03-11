@@ -1,0 +1,28 @@
+- hosts: all
+  roles:
+   - common
+   - users
+   - firewall
+   - selinx
+
+- hosts: web
+  vars:
+   vg_name: vg_web
+   lv_name: lv_webdata
+   mount_point: /webdata
+  roles:
+   - lvm
+
+- hosts: db
+  vars:
+   vg_name: vg_db
+   lv_name: lv_dbdata
+   mount_point: /dbdata
+  roles:
+   - lvm
+   - database
+   - backup
+
+- hosts: web
+  roles:
+   - web

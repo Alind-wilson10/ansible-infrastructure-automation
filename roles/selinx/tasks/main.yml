@@ -1,0 +1,24 @@
+---
+# tasks file for selinx
+- name: Ensure SELinux is enforcing
+  ansible.posix.selinux:
+   policy: targeted
+   state: enforcing
+
+- name: Allow Apache to make network connections
+  ansible.posix.seboolean:
+   name: httpd_can_network_connect
+   state: yes
+   persistent: yes
+  when: "'web' in group_names"
+
+- name: Set SELinux context for web directory
+  community.general.sefcontext:
+   target: "/var/www/html(/.*)?"
+   setype: httpd_sys_content_t
+   state: present
+  when: "'web' in group_names"
+
+- name: Apply SELinux context to web directory
+  command: restorecon -Rv /var/www/html
+  when: "'web' in group_names"

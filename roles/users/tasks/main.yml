@@ -1,0 +1,22 @@
+---
+# tasks file for users
+- name: Create admin group
+  group:
+   name: admingroup
+   state: present
+
+- name: Create users
+  user:
+   name: "{{ item }}"
+   groups: admingroup
+   state: present
+   create_home: yes
+  loop: "{{ user }}"
+
+- name: Give sudo privileges
+  copy:
+   src: admingroup
+   dest: /etc/sudoers.d/admingroup
+   owner: root
+   group: root
+   mode: '0440'
